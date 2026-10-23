@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Meta Tag Mencegah Cache Browser (Agar Perubahan Langsung Muncul di HP) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>Sistem Informasi Infaq & Sedekah - MI Ma'arif Kuwaderan</title>
     
     <!-- Tailwind CSS CDN -->
@@ -34,10 +40,8 @@
         }
     </script>
     
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome Icons & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -48,7 +52,7 @@
             background-color: #f8fafc;
         }
 
-        /* Print Style Optimization */
+        /* Pengaturan Khusus Cetak / Print */
         @media print {
             .no-print { 
                 display: none !important; 
@@ -97,7 +101,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- Header Khusus Cetak / Print Kop Surat -->
+    <!-- Header Cetak Kop Surat (Khusus Cetak) -->
     <div class="print-only p-4 mb-4 border-b-2 border-slate-800">
         <div class="flex items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -159,7 +163,7 @@
     <!-- Area Konten Utama -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- Banner Indikator Status Mode & Action Tools -->
+        <!-- Status Mode & Tombol Aksi -->
         <div id="modeIndicator" class="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <span id="modeBadge" class="px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5"></span>
@@ -175,7 +179,7 @@
             </div>
         </div>
 
-        <!-- Navigation Tab Pemisah Kategori Kas Infaq -->
+        <!-- Tab Kategori Infaq -->
         <div class="no-print flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
             <div class="flex flex-wrap gap-2">
                 <button onclick="setTabInfaq('all')" id="tabInfaqAll" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
@@ -192,15 +196,13 @@
                 </button>
             </div>
 
-            <!-- Active View Status Indicator -->
             <div class="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-900 rounded-lg border border-emerald-300/80" id="currentTabLabel">
                 <i class="fa-solid fa-filter mr-1 text-emerald-700"></i> Kategori: Semua Infaq (Gabungan)
             </div>
         </div>
 
-        <!-- Ringkasan Saldo Utama (Metric Cards) -->
+        <!-- Kartu Ringkasan Saldo -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Card Pemasukan -->
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden group hover:border-emerald-300 transition">
                 <div class="flex items-center justify-between mb-2">
                     <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pemasukan</p>
@@ -212,7 +214,6 @@
                 <p class="text-[11px] text-slate-400 mt-1 font-medium">Pemasukan terakumulasi</p>
             </div>
 
-            <!-- Card Pengeluaran -->
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden group hover:border-rose-300 transition">
                 <div class="flex items-center justify-between mb-2">
                     <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pengeluaran</p>
@@ -224,7 +225,6 @@
                 <p class="text-[11px] text-slate-400 mt-1 font-medium">Pengeluaran dana</p>
             </div>
 
-            <!-- Card Sisa Saldo -->
             <div class="card-box bg-gradient-to-br from-nuGreen-800 via-nuGreen-900 to-nuGreen-950 rounded-2xl p-5 shadow-md border border-nuGreen-700 text-white relative overflow-hidden">
                 <div class="flex items-center justify-between mb-2">
                     <p class="text-xs font-bold uppercase tracking-wider text-nuGold-400">Sisa Saldo Kas Infaq</p>
@@ -237,9 +237,8 @@
             </div>
         </div>
 
-        <!-- Section Rincian Detail Transaksi Per Kategori -->
+        <!-- Rincian Transaksi Masuk & Keluar -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Rincian Pemasukan -->
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-emerald-100 pb-3 mb-3">
                     <h3 class="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-2">
@@ -253,7 +252,6 @@
                 <div class="max-h-60 overflow-y-auto pr-1 space-y-2" id="inflowDetailList"></div>
             </div>
 
-            <!-- Rincian Pengeluaran -->
             <div class="bg-white rounded-2xl shadow-sm border border-rose-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-rose-100 pb-3 mb-3">
                     <h3 class="text-xs font-extrabold text-rose-900 uppercase tracking-wider flex items-center gap-2">
@@ -325,7 +323,7 @@
             </form>
         </div>
 
-        <!-- Tabel Riwayat Kas Infaq -->
+        <!-- Tabel Riwayat Transaksi -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-center no-print">
                 <div class="flex items-center gap-2 w-full md:w-auto">
@@ -428,15 +426,13 @@
                 </div>
             </div>
 
-            <!-- Grid Galeri Fleksibel (Portrait/Landscape Friendly) -->
             <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-start"></div>
         </section>
 
     </main>
 
-    <!-- JavaScript Application Core -->
+    <!-- Logika JavaScript Utama -->
     <script>
-        // Data Transaksi Bawaan
         const initialTransactions = [
             { id: 1, group: 'mingguan', date: '2026-10-02', type: 'masuk', category: 'Amal Jumat', amount: 350000, note: 'Hasil tromol jumat minggu 1' },
             { id: 2, group: 'bulanan', date: '2026-10-05', type: 'masuk', category: 'Infaq SPP', amount: 1200000, note: 'Infaq bulanan wali murid kelas 1-6' },
@@ -444,13 +440,11 @@
             { id: 4, group: 'lainnya', date: '2026-10-12', type: 'masuk', category: 'Donasi Alumni', amount: 500000, note: 'Bantuan kegiatan keagamaan' }
         ];
 
-        // Data Galeri Bawaan
         const initialGallery = [
             { id: 1, title: 'Kegiatan Perbaikan Kelas', url: 'https://placehold.co/400x300/166534/ffffff?text=Perbaikan+Kelas' },
             { id: 2, title: 'Pembelian Karpet Musala', url: 'https://placehold.co/400x300/15803d/ffffff?text=Karpet+Musala' }
         ];
 
-        // Aplikasi State
         let state = {
             accessMode: 'public',
             activeTab: 'all',
@@ -458,7 +452,7 @@
             gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery
         };
 
-        // Fungsi Kompresi Gambar ke Canvas (Mencegah Quota Limit Exceeded)
+        // Fungsi Kompresi Gambar ke Canvas (Mencegah Penyimpanan Penuh)
         function compressAndReadImage(file, callback) {
             const maxWidth = 800;
             const quality = 0.75;
@@ -490,7 +484,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Fungsi Format Uang & Tanggal
         function formatRp(num) {
             return 'Rp ' + Number(num).toLocaleString('id-ID');
         }
@@ -502,13 +495,11 @@
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
-        // Save State
         function saveToStorage() {
             localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
             localStorage.setItem('mi_gallery', JSON.stringify(state.gallery));
         }
 
-        // Mode Switching System
         function setAccessMode(mode) {
             state.accessMode = mode;
             const btnPublic = document.getElementById('btnModePublic');
@@ -543,7 +534,6 @@
             renderData();
         }
 
-        // Tab Navigation
         function setTabInfaq(tab) {
             state.activeTab = tab;
             const tabs = ['all', 'mingguan', 'bulanan', 'lainnya'];
@@ -571,7 +561,6 @@
             renderData();
         }
 
-        // Filtering
         function getFilteredTransactions() {
             const filterType = document.getElementById('filterType').value;
             const keyword = document.getElementById('searchKeyword').value.toLowerCase().trim();
@@ -584,7 +573,6 @@
             });
         }
 
-        // Render Utama
         function renderData() {
             const filtered = getFilteredTransactions();
             const tableBody = document.getElementById('transactionTableBody');
@@ -616,7 +604,6 @@
                 });
             }
 
-            // Hitung Totals
             const activeSet = state.transactions.filter(t => state.activeTab === 'all' || t.group === state.activeTab);
             const totalMasuk = activeSet.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + curr.amount, 0);
             const totalKeluar = activeSet.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + curr.amount, 0);
@@ -635,7 +622,6 @@
             renderGallery();
         }
 
-        // Render Rincian Uang Masuk & Keluar
         function renderDetailLists(dataset) {
             const inflowList = document.getElementById('inflowDetailList');
             const outflowList = document.getElementById('outflowDetailList');
@@ -669,7 +655,6 @@
                 `).join('');
         }
 
-        // Render Galeri Foto Kegiatan (Responsif untuk Portrait & Landscape)
         function renderGallery() {
             const container = document.getElementById('galleryContainer');
             container.innerHTML = state.gallery.map(item => `
@@ -689,7 +674,6 @@
             `).join('');
         }
 
-        // Form Submission
         function handleAddTransaction(event) {
             event.preventDefault();
             const newTx = {
@@ -721,7 +705,6 @@
             }
         }
 
-        // Persistent Logo & Photo Handlers
         function handleLogoUpload(e) {
             const file = e.target.files[0];
             if (file) {
@@ -765,7 +748,6 @@
             }
         }
 
-        // Export CSV
         function exportToCSV() {
             const filtered = getFilteredTransactions();
             let csvContent = 'data:text/csv;charset=utf-8,No,Kelompok,Tanggal,Kategori,Keterangan,Jenis,Nominal\n';
@@ -783,14 +765,12 @@
             document.body.removeChild(link);
         }
 
-        // Inisialisasi Aplikasi saat Load
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('inputDate').valueAsDate = new Date();
             document.getElementById('printDate').textContent = new Date().toLocaleDateString('id-ID', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
 
-            // Load Saved Logo & Headmaster Photo dari localStorage
             const savedLogo = localStorage.getItem('mi_saved_logo');
             if (savedLogo) {
                 document.getElementById('appLogo').src = savedLogo;
