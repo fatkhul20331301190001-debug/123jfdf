@@ -34,7 +34,7 @@
         }
     </script>
     
-    <!-- FontAwesome Icons CDN -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
@@ -78,7 +78,7 @@
             display: none; 
         }
 
-        /* Custom Scrollbar Styling */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -97,14 +97,6 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- Notification Toast Modal -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs font-semibold border border-slate-700">
-        <div id="toastIcon" class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <span id="toastMessage">Pesan Notifikasi</span>
-    </div>
-
     <!-- Header Khusus Cetak / Print Kop Surat -->
     <div class="print-only p-4 mb-4 border-b-2 border-slate-800">
         <div class="flex items-center justify-between gap-4">
@@ -114,7 +106,7 @@
                     <h1 class="text-xl font-bold uppercase tracking-wide text-slate-900">LEMBAGA MA'ARIF NU</h1>
                     <h2 class="text-2xl font-extrabold uppercase tracking-wide text-emerald-900">MI MA'ARIF KUWADERAN</h2>
                     <p class="text-xs text-slate-600 mt-0.5">Alamat: Kuwaderan, Kec. Kajoran, Kab. Magelang, Jawa Tengah</p>
-                    <p class="text-xs font-semibold text-emerald-800" id="printReportCategory">Laporan Transparansi Kas Real-Time</p>
+                    <p class="text-xs font-semibold text-emerald-800">Laporan Transparansi Kas Real-Time</p>
                 </div>
             </div>
             <div class="text-right text-xs text-slate-500">
@@ -125,7 +117,7 @@
     </div>
 
     <!-- Header Navigasi Utama -->
-    <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl no-print sticky top-0 z-40">
+    <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl no-print sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 
@@ -211,31 +203,31 @@
             <!-- Card Pemasukan -->
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden group hover:border-emerald-300 transition">
                 <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500" id="labelTotalMasuk">Total Pemasukan</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pemasukan</p>
                     <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
                         <i class="fa-solid fa-arrow-down-left"></i>
                     </div>
                 </div>
                 <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight" id="cardTotalMasuk">Rp 0</h3>
-                <p class="text-[11px] text-slate-400 mt-1 font-medium" id="subTotalMasuk">Pemasukan terakumulasi</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-medium">Pemasukan terakumulasi</p>
             </div>
 
             <!-- Card Pengeluaran -->
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden group hover:border-rose-300 transition">
                 <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500" id="labelTotalKeluar">Total Pengeluaran</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pengeluaran</p>
                     <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
                         <i class="fa-solid fa-arrow-up-right"></i>
                     </div>
                 </div>
                 <h3 class="text-2xl sm:text-3xl font-extrabold text-rose-600 tracking-tight" id="cardTotalKeluar">Rp 0</h3>
-                <p class="text-[11px] text-slate-400 mt-1 font-medium" id="subTotalKeluar">Pengeluaran dana</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-medium">Pengeluaran dana</p>
             </div>
 
             <!-- Card Sisa Saldo -->
             <div class="card-box bg-gradient-to-br from-nuGreen-800 via-nuGreen-900 to-nuGreen-950 rounded-2xl p-5 shadow-md border border-nuGreen-700 text-white relative overflow-hidden">
                 <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-bold uppercase tracking-wider text-nuGold-400" id="labelSisaSaldo">Sisa Saldo Kas Infaq</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-nuGold-400">Sisa Saldo Kas Infaq</p>
                     <div class="w-8 h-8 rounded-lg bg-emerald-800/60 text-nuGold-400 flex items-center justify-center border border-nuGold-500/20">
                         <i class="fa-solid fa-wallet"></i>
                     </div>
@@ -245,9 +237,9 @@
             </div>
         </div>
 
-        <!-- Section Rincian Detail Transaksi Per Kategori (Uang Masuk vs Uang Keluar) -->
+        <!-- Section Rincian Detail Transaksi Per Kategori -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Rincian Pemasukan (Uang Masuk) -->
+            <!-- Rincian Pemasukan -->
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-emerald-100 pb-3 mb-3">
                     <h3 class="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-2">
@@ -261,7 +253,7 @@
                 <div class="max-h-60 overflow-y-auto pr-1 space-y-2" id="inflowDetailList"></div>
             </div>
 
-            <!-- Rincian Pengeluaran (Uang Keluar) -->
+            <!-- Rincian Pengeluaran -->
             <div class="bg-white rounded-2xl shadow-sm border border-rose-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-rose-100 pb-3 mb-3">
                     <h3 class="text-xs font-extrabold text-rose-900 uppercase tracking-wider flex items-center gap-2">
@@ -276,7 +268,7 @@
             </div>
         </div>
 
-        <!-- Form Input Transaksi HTML5 (Mode Pengurus) -->
+        <!-- Form Input Transaksi (Mode Pengurus) -->
         <div id="adminFormSection" class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5 no-print transition-all">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -320,7 +312,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan / Uraian</label>
-                    <input type="text" id="inputNote" placeholder="Cth: Pembayaran Bulan Oktober / Kebersihan" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
+                    <input type="text" id="inputNote" placeholder="Cth: Pembayaran Bulan Oktober" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
                 </div>
                 <div class="sm:col-span-2 lg:col-span-6 flex justify-end gap-2 mt-2 pt-2 border-t border-slate-100">
                     <button type="button" onclick="resetForm()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
@@ -417,7 +409,7 @@
             </div>
         </section>
 
-        <!-- Section Galeri Foto Kegiatan -->
+        <!-- Section Galeri Foto Kegiatan (Responsif Portrait & Landscape) -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
             <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-3">
                 <div>
@@ -436,123 +428,40 @@
                 </div>
             </div>
 
-            <div id="galleryContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+            <!-- Grid Galeri Fleksibel (Portrait/Landscape Friendly) -->
+            <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-start"></div>
         </section>
 
-        <!-- Section Unggah Berkas & Bukti Tambahan -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
-            <div class="border-b border-slate-200 pb-4 mb-4">
-                <span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    <i class="fa-solid fa-file-arrow-up mr-1"></i> Unggah Dokumentasi
-                </span>
-                <h2 class="text-lg font-extrabold text-slate-800 mt-1">Unggah Berkas & Bukti Transaksi</h2>
-                <p class="text-xs text-slate-500">Unggah foto nota, kuitansi, atau foto kegiatan kas infaq untuk arsip digital madrasah.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Dropzone Input File -->
-                <div class="md:col-span-2 border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 rounded-2xl p-6 text-center transition cursor-pointer flex flex-col items-center justify-center relative group" onclick="document.getElementById('bottomFileUpload').click()">
-                    <input type="file" id="bottomFileUpload" accept="image/*" class="hidden" onchange="handleBottomFileUpload(event)">
-                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mb-3 text-xl group-hover:scale-110 transition">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                    </div>
-                    <p class="text-sm font-bold text-slate-800 mb-1" id="bottomFileLabel">Klik atau Tarik Berkas ke Sini</p>
-                    <p class="text-xs text-slate-500 mb-2">Mendukung format gambar (JPG, PNG, WEBP)</p>
-                    <span class="text-[11px] bg-emerald-800 text-white font-semibold px-3 py-1 rounded-xl shadow-sm">
-                        Pilih Berkas Dari Perangkat
-                    </span>
-                </div>
-
-                <!-- Form Detail Berkas -->
-                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider border-b border-slate-200 pb-2">
-                            <i class="fa-solid fa-circle-info mr-1 text-emerald-700"></i> Informasi Berkas
-                        </h3>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul / Nama Berkas</label>
-                            <input type="text" id="bottomFileTitle" placeholder="Cth: Kuitansi Semen / Nota Konsumsi" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori Kas Terkait</label>
-                            <select id="bottomFileGroup" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white font-medium text-slate-700">
-                                <option value="mingguan">Amal Mingguan</option>
-                                <option value="bulanan">Infaq Bulanan</option>
-                                <option value="lainnya">Pendapatan Lainnya</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-200 text-right">
-                        <button onclick="submitBottomFile()" class="w-full bg-nuGreen-800 hover:bg-nuGreen-900 text-white font-bold py-2 px-4 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane"></i> Unggah Dokumentasi
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <!-- Footer Copyright & Info -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 no-print mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-            <p class="font-semibold text-slate-300">Sistem Informasi Transparansi Infaq & Sedekah — MI Ma'arif Kuwaderan</p>
-            <p class="text-slate-500 text-[11px]">Dikembangkan untuk mendukung keterbukaan publik & akuntabilitas pengelolaan dana madrasah.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript Application Core Logic -->
+    <!-- JavaScript Application Core -->
     <script>
-        // Sample Initial Transactions
+        // Data Transaksi Bawaan
         const initialTransactions = [
             { id: 1, group: 'mingguan', date: '2026-10-02', type: 'masuk', category: 'Amal Jumat', amount: 350000, note: 'Hasil tromol jumat minggu 1' },
             { id: 2, group: 'bulanan', date: '2026-10-05', type: 'masuk', category: 'Infaq SPP', amount: 1200000, note: 'Infaq bulanan wali murid kelas 1-6' },
-            { id: 3, group: 'mingguan', date: '2026-10-10', type: 'keluar', category: 'Kebersihan', amount: 150000, note: 'Pembelian alat kebersihan madrasah' },
+            { id: 3, group: 'mingguan', date: '2026-10-10', type: 'keluar', category: 'Kebersihan', amount: 150000, note: 'Pembelian alat kebersihan' },
             { id: 4, group: 'lainnya', date: '2026-10-12', type: 'masuk', category: 'Donasi Alumni', amount: 500000, note: 'Bantuan kegiatan keagamaan' }
         ];
 
-        // Sample Initial Gallery Items
+        // Data Galeri Bawaan
         const initialGallery = [
             { id: 1, title: 'Kegiatan Perbaikan Kelas', url: 'https://placehold.co/400x300/166534/ffffff?text=Perbaikan+Kelas' },
             { id: 2, title: 'Pembelian Karpet Musala', url: 'https://placehold.co/400x300/15803d/ffffff?text=Karpet+Musala' }
         ];
 
-        // Reactive Application State
+        // Aplikasi State
         let state = {
-            accessMode: 'public', // 'public' or 'admin'
-            activeTab: 'all',     // 'all', 'mingguan', 'bulanan', 'lainnya'
+            accessMode: 'public',
+            activeTab: 'all',
             transactions: JSON.parse(localStorage.getItem('mi_transactions')) || initialTransactions,
-            gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery,
-            tempBottomFile: null
+            gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery
         };
 
-        // Utility: Toast Notification Trigger
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toastNotification');
-            const toastMsg = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMsg.textContent = message;
-            if (isError) {
-                toastIcon.className = 'w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center text-sm';
-                toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-            } else {
-                toastIcon.className = 'w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm';
-                toastIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-            }
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        // Utility: Image Compression Handler (Canvas 800px Max Width @ 70% Quality JPEG)
+        // Fungsi Kompresi Gambar ke Canvas (Mencegah Quota Limit Exceeded)
         function compressAndReadImage(file, callback) {
             const maxWidth = 800;
-            const quality = 0.7;
+            const quality = 0.75;
             const reader = new FileReader();
 
             reader.onload = function(e) {
@@ -581,7 +490,7 @@
             reader.readAsDataURL(file);
         }
 
-        // Currency & Date Formatters
+        // Fungsi Format Uang & Tanggal
         function formatRp(num) {
             return 'Rp ' + Number(num).toLocaleString('id-ID');
         }
@@ -593,16 +502,13 @@
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
+        // Save State
         function saveToStorage() {
-            try {
-                localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
-                localStorage.setItem('mi_gallery', JSON.stringify(state.gallery));
-            } catch (err) {
-                showToast('Memori penyimpanan lokal penuh. Sebagian gambar mungkin tidak tersimpan.', true);
-            }
+            localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
+            localStorage.setItem('mi_gallery', JSON.stringify(state.gallery));
         }
 
-        // Access Mode Switcher
+        // Mode Switching System
         function setAccessMode(mode) {
             state.accessMode = mode;
             const btnPublic = document.getElementById('btnModePublic');
@@ -618,28 +524,26 @@
                 
                 modeBadge.className = 'px-3 py-1 rounded-full font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300';
                 modeBadge.innerHTML = '<i class="fa-solid fa-user-shield"></i> Mode Pengurus Active';
-                modeDesc.textContent = 'Akses penuh untuk menambah, mengedit, dan mengelola transaksi kas.';
+                modeDesc.textContent = 'Akses penuh untuk mengelola data, transaksi, dan galeri.';
                 
                 adminForm.classList.remove('hidden');
                 adminBtns.forEach(btn => btn.classList.remove('hidden'));
-                showToast('Beralih ke Mode Pengurus');
             } else {
                 btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow';
                 btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white';
                 
                 modeBadge.className = 'px-3 py-1 rounded-full font-bold text-xs bg-emerald-100 text-emerald-900 border border-emerald-300';
                 modeBadge.innerHTML = '<i class="fa-solid fa-eye"></i> Mode Publik Active';
-                modeDesc.textContent = 'Tampilan khusus wali murid & publik (Read Only).';
+                modeDesc.textContent = 'Tampilan publik/wali murid (Read Only).';
                 
                 adminForm.classList.add('hidden');
                 adminBtns.forEach(btn => btn.classList.add('hidden'));
-                showToast('Beralih ke Mode Publik (Read Only)');
             }
 
             renderData();
         }
 
-        // Tab Navigation Controller
+        // Tab Navigation
         function setTabInfaq(tab) {
             state.activeTab = tab;
             const tabs = ['all', 'mingguan', 'bulanan', 'lainnya'];
@@ -667,7 +571,7 @@
             renderData();
         }
 
-        // Filter Logic Strategy
+        // Filtering
         function getFilteredTransactions() {
             const filterType = document.getElementById('filterType').value;
             const keyword = document.getElementById('searchKeyword').value.toLowerCase().trim();
@@ -675,20 +579,19 @@
             return state.transactions.filter(item => {
                 const matchTab = state.activeTab === 'all' || item.group === state.activeTab;
                 const matchType = filterType === 'all' || item.type === filterType;
-                const matchSearch = item.category.toLowerCase().includes(keyword) || (item.note && item.note.toLowerCase().includes(keyword));
+                const matchSearch = item.category.toLowerCase().includes(keyword) || item.note.toLowerCase().includes(keyword);
                 return matchTab && matchType && matchSearch;
             });
         }
 
-        // Render Application Data
+        // Render Utama
         function renderData() {
             const filtered = getFilteredTransactions();
             const tableBody = document.getElementById('transactionTableBody');
             
-            // Render Transaction Table
             tableBody.innerHTML = '';
             if (filtered.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400 italic">Tidak ada data transaksi yang sesuai filter.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400 italic">Tidak ada data transaksi.</td></tr>`;
             } else {
                 filtered.forEach((tx, idx) => {
                     const row = document.createElement('tr');
@@ -703,7 +606,7 @@
                         <td class="p-3.5 text-right font-bold text-rose-600">${tx.type === 'keluar' ? formatRp(tx.amount) : '-'}</td>
                         <td class="p-3.5 text-center no-print">
                             ${state.accessMode === 'admin' ? `
-                                <button onclick="deleteTransaction(${tx.id})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1 rounded hover:bg-rose-50 transition">
+                                <button onclick="deleteTransaction(${tx.id})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1 rounded hover:bg-rose-50">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             ` : '-'}
@@ -713,7 +616,7 @@
                 });
             }
 
-            // Metric Calculations
+            // Hitung Totals
             const activeSet = state.transactions.filter(t => state.activeTab === 'all' || t.group === state.activeTab);
             const totalMasuk = activeSet.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + curr.amount, 0);
             const totalKeluar = activeSet.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + curr.amount, 0);
@@ -723,20 +626,16 @@
             document.getElementById('cardTotalKeluar').textContent = formatRp(totalKeluar);
             document.getElementById('cardSisaSaldo').textContent = formatRp(sisaSaldo);
 
-            // Filtered Totals for Table Footer
             const filterMasuk = filtered.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + curr.amount, 0);
             const filterKeluar = filtered.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + curr.amount, 0);
             document.getElementById('tableTotalMasuk').textContent = formatRp(filterMasuk);
             document.getElementById('tableTotalKeluar').textContent = formatRp(filterKeluar);
 
-            // Render Detail Breakdown Lists
             renderDetailLists(activeSet);
-
-            // Render Photo Gallery
             renderGallery();
         }
 
-        // Inflow & Outflow Detail List Renderer
+        // Render Rincian Uang Masuk & Keluar
         function renderDetailLists(dataset) {
             const inflowList = document.getElementById('inflowDetailList');
             const outflowList = document.getElementById('outflowDetailList');
@@ -749,7 +648,7 @@
 
             inflowList.innerHTML = inflows.length === 0 ? '<p class="text-xs text-slate-400 italic">Belum ada transaksi masuk.</p>' :
                 inflows.map(item => `
-                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100/80">
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-emerald-50/50 border border-emerald-100/80">
                         <div>
                             <p class="font-bold text-xs text-slate-800">${item.category}</p>
                             <p class="text-[10px] text-slate-500">${formatDate(item.date)} • ${item.note || 'Tanpa keterangan'}</p>
@@ -760,7 +659,7 @@
 
             outflowList.innerHTML = outflows.length === 0 ? '<p class="text-xs text-slate-400 italic">Belum ada transaksi keluar.</p>' :
                 outflows.map(item => `
-                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/50 border border-rose-100/80">
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-rose-50/50 border border-rose-100/80">
                         <div>
                             <p class="font-bold text-xs text-slate-800">${item.category}</p>
                             <p class="text-[10px] text-slate-500">${formatDate(item.date)} • ${item.note || 'Tanpa keterangan'}</p>
@@ -770,25 +669,27 @@
                 `).join('');
         }
 
-        // Photo Gallery Renderer
+        // Render Galeri Foto Kegiatan (Responsif untuk Portrait & Landscape)
         function renderGallery() {
             const container = document.getElementById('galleryContainer');
             container.innerHTML = state.gallery.map(item => `
-                <div class="group relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
-                    <img src="${item.url}" alt="${item.title}" class="w-full h-36 object-cover group-hover:scale-105 transition duration-300">
-                    <div class="p-2.5 bg-white">
-                        <p class="text-xs font-bold text-slate-800 truncate">${item.title}</p>
+                <div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm flex flex-col transition hover:shadow-md">
+                    <div class="w-full bg-slate-900/5 flex items-center justify-center overflow-hidden p-1">
+                        <img src="${item.url}" alt="${item.title}" class="w-full h-auto max-h-[400px] object-contain rounded-xl transition duration-300 group-hover:scale-[1.02]">
+                    </div>
+                    <div class="p-3 bg-white border-t border-slate-100 flex-grow flex items-center justify-between">
+                        <p class="text-xs font-bold text-slate-800 leading-snug">${item.title}</p>
                     </div>
                     ${state.accessMode === 'admin' ? `
-                        <button onclick="deleteGalleryItem(${item.id})" class="absolute top-2 right-2 bg-rose-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow">
-                            <i class="fa-solid fa-xmark"></i>
+                        <button onclick="deleteGalleryItem(${item.id})" class="absolute top-2 right-2 bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow hover:bg-rose-700">
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     ` : ''}
                 </div>
             `).join('');
         }
 
-        // Add Transaction Handler
+        // Form Submission
         function handleAddTransaction(event) {
             event.preventDefault();
             const newTx = {
@@ -805,7 +706,6 @@
             saveToStorage();
             renderData();
             resetForm();
-            showToast('Transaksi berhasil disimpan!');
         }
 
         function resetForm() {
@@ -814,22 +714,21 @@
         }
 
         function deleteTransaction(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
+            if (confirm('Hapus transaksi ini?')) {
                 state.transactions = state.transactions.filter(t => t.id !== id);
                 saveToStorage();
                 renderData();
-                showToast('Transaksi dihapus');
             }
         }
 
-        // Compressed Image Upload Handlers
+        // Persistent Logo & Photo Handlers
         function handleLogoUpload(e) {
             const file = e.target.files[0];
             if (file) {
-                compressAndReadImage(file, function(compressedBase64) {
-                    document.getElementById('appLogo').src = compressedBase64;
-                    document.getElementById('printLogo').src = compressedBase64;
-                    showToast('Logo berhasil diperbarui');
+                compressAndReadImage(file, function(base64) {
+                    document.getElementById('appLogo').src = base64;
+                    document.getElementById('printLogo').src = base64;
+                    localStorage.setItem('mi_saved_logo', base64);
                 });
             }
         }
@@ -837,9 +736,9 @@
         function handleHeadmasterPhotoUpload(e) {
             const file = e.target.files[0];
             if (file) {
-                compressAndReadImage(file, function(compressedBase64) {
-                    document.getElementById('headmasterPhoto').src = compressedBase64;
-                    showToast('Foto Kepala Sekolah diperbarui');
+                compressAndReadImage(file, function(base64) {
+                    document.getElementById('headmasterPhoto').src = base64;
+                    localStorage.setItem('mi_saved_headmaster', base64);
                 });
             }
         }
@@ -847,62 +746,26 @@
         function handleGalleryUpload(e) {
             const file = e.target.files[0];
             if (file) {
-                const title = prompt('Masukkan Judul / Keterangan Foto:', 'Kegiatan Infaq');
+                const title = prompt('Masukkan Judul / Keterangan Foto:', 'Dokumentasi Infaq');
                 if (title) {
-                    compressAndReadImage(file, function(compressedBase64) {
-                        state.gallery.push({ id: Date.now(), title: title, url: compressedBase64 });
+                    compressAndReadImage(file, function(base64) {
+                        state.gallery.push({ id: Date.now(), title: title, url: base64 });
                         saveToStorage();
                         renderGallery();
-                        showToast('Foto berhasil ditambahkan ke galeri');
                     });
                 }
             }
         }
 
         function deleteGalleryItem(id) {
-            if (confirm('Hapus foto galeri ini?')) {
+            if (confirm('Hapus foto galeri ini secara permanen?')) {
                 state.gallery = state.gallery.filter(g => g.id !== id);
                 saveToStorage();
                 renderGallery();
-                showToast('Foto galeri dihapus');
             }
         }
 
-        function handleBottomFileUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                state.tempBottomFile = file;
-                document.getElementById('bottomFileLabel').textContent = `Berkas Terpilih: ${file.name}`;
-            }
-        }
-
-        function submitBottomFile() {
-            const title = document.getElementById('bottomFileTitle').value;
-            const group = document.getElementById('bottomFileGroup').value;
-
-            if (!state.tempBottomFile) {
-                showToast('Silakan pilih berkas foto terlebih dahulu!', true);
-                return;
-            }
-            if (!title) {
-                showToast('Silakan masukkan judul berkas!', true);
-                return;
-            }
-
-            compressAndReadImage(state.tempBottomFile, function(compressedBase64) {
-                state.gallery.push({ id: Date.now(), title: `[${group.toUpperCase()}] ${title}`, url: compressedBase64 });
-                saveToStorage();
-                renderGallery();
-                
-                // Clear Form State
-                state.tempBottomFile = null;
-                document.getElementById('bottomFileTitle').value = '';
-                document.getElementById('bottomFileLabel').textContent = 'Klik atau Tarik Berkas ke Sini';
-                showToast('Dokumentasi berhasil diunggah ke Galeri!');
-            });
-        }
-
-        // CSV Export Handler
+        // Export CSV
         function exportToCSV() {
             const filtered = getFilteredTransactions();
             let csvContent = 'data:text/csv;charset=utf-8,No,Kelompok,Tanggal,Kategori,Keterangan,Jenis,Nominal\n';
@@ -918,15 +781,27 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast('Laporan CSV berhasil diunduh');
         }
 
-        // Application Initialization
+        // Inisialisasi Aplikasi saat Load
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('inputDate').valueAsDate = new Date();
             document.getElementById('printDate').textContent = new Date().toLocaleDateString('id-ID', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
+
+            // Load Saved Logo & Headmaster Photo dari localStorage
+            const savedLogo = localStorage.getItem('mi_saved_logo');
+            if (savedLogo) {
+                document.getElementById('appLogo').src = savedLogo;
+                document.getElementById('printLogo').src = savedLogo;
+            }
+
+            const savedHeadmaster = localStorage.getItem('mi_saved_headmaster');
+            if (savedHeadmaster) {
+                document.getElementById('headmasterPhoto').src = savedHeadmaster;
+            }
+
             setAccessMode('public');
             setTabInfaq('all');
         });
