@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Meta Tag Mencegah Cache Browser -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
     <title>Sistem Informasi Infaq & Sedekah - MI Ma'arif Kuwaderan</title>
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -30,6 +32,7 @@
         }
     </script>
     
+    <!-- FontAwesome Icons & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,6 +113,7 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
+        <!-- Banner Mode & Aksi -->
         <div id="modeIndicator" class="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <span id="modeBadge" class="px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5"></span>
@@ -125,6 +129,7 @@
             </div>
         </div>
 
+        <!-- Navigation Tabs -->
         <div class="no-print flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
             <div class="flex flex-wrap gap-2">
                 <button onclick="setTabInfaq('all')" id="tabInfaqAll" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
@@ -146,6 +151,7 @@
             </div>
         </div>
 
+        <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden">
                 <div class="flex items-center justify-between mb-2">
@@ -181,6 +187,7 @@
             </div>
         </div>
 
+        <!-- Detail Rincian -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-emerald-100 pb-3 mb-3">
@@ -209,7 +216,7 @@
             </div>
         </div>
 
-        <!-- Form Input Transaksi Khusus Mode Pengurus -->
+        <!-- Form Input Transaksi -->
         <div id="adminFormSection" class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5 no-print transition-all">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -266,6 +273,7 @@
             </form>
         </div>
 
+        <!-- Tabel Riwayat Kas -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-center no-print">
                 <div class="flex items-center gap-2 w-full md:w-auto">
@@ -309,6 +317,7 @@
             </div>
         </div>
 
+        <!-- Sambutan Kepala Sekolah -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
             <div class="text-center mb-6">
                 <span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
@@ -348,6 +357,7 @@
             </div>
         </section>
 
+        <!-- Galeri Foto Kegiatan -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
             <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-3">
                 <div>
@@ -371,9 +381,10 @@
 
     </main>
 
+    <!-- JavaScript Logika Aplikasi Utama -->
     <script>
-        // ISI URL WEB APP APPS SCRIPT KAMU DI SINI
-        const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+        // URL WEB APP APPS SCRIPT YANG SUDAH TERHUBUNG KE GOOGLE SHEETS
+        const API_URL = "https://script.google.com/macros/s/AKfycby3LGr4MydaBRXWtipsp6RY_P0KV4v6WIY7qpMQVywHMnOzRFCJ-NY6k6Sk7ekXuaCx/exec";
 
         const initialGallery = [
             { id: 1, title: 'Kegiatan Perbaikan Kelas', url: 'https://placehold.co/400x300/166534/ffffff?text=Perbaikan+Kelas' },
@@ -383,20 +394,24 @@
         let state = {
             accessMode: 'public',
             activeTab: 'all',
-            transactions: [],
+            transactions: JSON.parse(localStorage.getItem('mi_transactions')) || [],
             gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery
         };
 
+        // Ambil Data dari Google Sheets
         async function fetchTransactionsFromSheet() {
-            if (!API_URL || API_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
+            if (!API_URL) return;
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                state.transactions = data.map(t => ({
-                    ...t,
-                    amount: Number(t.amount)
-                }));
-                renderData();
+                if (Array.isArray(data) && data.length > 0) {
+                    state.transactions = data.map(t => ({
+                        ...t,
+                        amount: Number(t.amount)
+                    }));
+                    localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
+                    renderData();
+                }
             } catch (err) {
                 console.error("Gagal membaca data dari Google Sheets:", err);
             }
@@ -444,6 +459,10 @@
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
+        function saveLocalTransactions() {
+            localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
+        }
+
         function setAccessMode(mode) {
             state.accessMode = mode;
             const btnPublic = document.getElementById('btnModePublic');
@@ -464,295 +483,3 @@
                 adminForm.classList.remove('hidden');
                 adminBtns.forEach(btn => btn.classList.remove('hidden'));
             } else {
-                btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow';
-                btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white';
-                
-                modeBadge.className = 'px-3 py-1 rounded-full font-bold text-xs bg-emerald-100 text-emerald-900 border border-emerald-300';
-                modeBadge.innerHTML = '<i class="fa-solid fa-eye"></i> Mode Publik Active';
-                modeDesc.textContent = 'Tampilan publik/wali murid (Read Only).';
-                
-                adminForm.classList.add('hidden');
-                adminBtns.forEach(btn => btn.classList.add('hidden'));
-            }
-
-            renderData();
-        }
-
-        function setTabInfaq(tab) {
-            state.activeTab = tab;
-            const tabs = ['all', 'mingguan', 'bulanan', 'lainnya'];
-            
-            tabs.forEach(t => {
-                const btn = document.getElementById(`tabInfaq${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                if (t === tab) {
-                    btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-nuGreen-800 text-white shadow-md';
-                } else {
-                    btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
-                }
-            });
-
-            const labels = {
-                all: 'Semua Infaq (Gabungan)',
-                mingguan: 'Amal Mingguan',
-                bulanan: 'Infaq Bulanan',
-                lainnya: 'Pendapatan Lainnya'
-            };
-            
-            document.getElementById('currentTabLabel').innerHTML = `<i class="fa-solid fa-filter mr-1 text-emerald-700"></i> Kategori: ${labels[tab]}`;
-            document.getElementById('inflowCategoryTitle').textContent = labels[tab];
-            document.getElementById('outflowCategoryTitle').textContent = labels[tab];
-
-            renderData();
-        }
-
-        function getFilteredTransactions() {
-            const filterType = document.getElementById('filterType').value;
-            const keyword = document.getElementById('searchKeyword').value.toLowerCase().trim();
-
-            return state.transactions.filter(item => {
-                const matchTab = state.activeTab === 'all' || item.group === state.activeTab;
-                const matchType = filterType === 'all' || item.type === filterType;
-                const matchSearch = String(item.category).toLowerCase().includes(keyword) || String(item.note).toLowerCase().includes(keyword);
-                return matchTab && matchType && matchSearch;
-            });
-        }
-
-        function renderData() {
-            const filtered = getFilteredTransactions();
-            const tableBody = document.getElementById('transactionTableBody');
-            
-            tableBody.innerHTML = '';
-            if (filtered.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400 italic">Tidak ada data transaksi.</td></tr>`;
-            } else {
-                filtered.forEach((tx, idx) => {
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-slate-50/80 transition';
-                    row.innerHTML = `
-                        <td class="p-3.5 text-center font-medium text-slate-500">${idx + 1}</td>
-                        <td class="p-3.5 font-bold uppercase text-[11px] text-emerald-800">${tx.group}</td>
-                        <td class="p-3.5 whitespace-nowrap">${formatDate(tx.date)}</td>
-                        <td class="p-3.5 font-semibold text-slate-800">${tx.category}</td>
-                        <td class="p-3.5 text-slate-600">${tx.note || '-'}</td>
-                        <td class="p-3.5 text-right font-bold text-emerald-600">${tx.type === 'masuk' ? formatRp(tx.amount) : '-'}</td>
-                        <td class="p-3.5 text-right font-bold text-rose-600">${tx.type === 'keluar' ? formatRp(tx.amount) : '-'}</td>
-                        <td class="p-3.5 text-center no-print">
-                            ${state.accessMode === 'admin' ? `
-                                <button onclick="deleteTransaction(${tx.id})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1 rounded hover:bg-rose-50">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            ` : '-'}
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-
-            const activeSet = state.transactions.filter(t => state.activeTab === 'all' || t.group === state.activeTab);
-            const totalMasuk = activeSet.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + curr.amount, 0);
-            const totalKeluar = activeSet.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + curr.amount, 0);
-            const sisaSaldo = totalMasuk - totalKeluar;
-
-            document.getElementById('cardTotalMasuk').textContent = formatRp(totalMasuk);
-            document.getElementById('cardTotalKeluar').textContent = formatRp(totalKeluar);
-            document.getElementById('cardSisaSaldo').textContent = formatRp(sisaSaldo);
-
-            const filterMasuk = filtered.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + curr.amount, 0);
-            const filterKeluar = filtered.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + curr.amount, 0);
-            document.getElementById('tableTotalMasuk').textContent = formatRp(filterMasuk);
-            document.getElementById('tableTotalKeluar').textContent = formatRp(filterKeluar);
-
-            renderDetailLists(activeSet);
-            renderGallery();
-        }
-
-        function renderDetailLists(dataset) {
-            const inflowList = document.getElementById('inflowDetailList');
-            const outflowList = document.getElementById('outflowDetailList');
-
-            const inflows = dataset.filter(t => t.type === 'masuk');
-            const outflows = dataset.filter(t => t.type === 'keluar');
-
-            document.getElementById('inflowCount').textContent = `${inflows.length} Transaksi`;
-            document.getElementById('outflowCount').textContent = `${outflows.length} Transaksi`;
-
-            inflowList.innerHTML = inflows.length === 0 ? '<p class="text-xs text-slate-400 italic">Belum ada transaksi masuk.</p>' :
-                inflows.map(item => `
-                    <div class="flex items-center justify-between p-2 rounded-xl bg-emerald-50/50 border border-emerald-100/80">
-                        <div>
-                            <p class="font-bold text-xs text-slate-800">${item.category}</p>
-                            <p class="text-[10px] text-slate-500">${formatDate(item.date)} • ${item.note || 'Tanpa keterangan'}</p>
-                        </div>
-                        <span class="font-bold text-xs text-emerald-700">${formatRp(item.amount)}</span>
-                    </div>
-                `).join('');
-
-            outflowList.innerHTML = outflows.length === 0 ? '<p class="text-xs text-slate-400 italic">Belum ada transaksi keluar.</p>' :
-                outflows.map(item => `
-                    <div class="flex items-center justify-between p-2 rounded-xl bg-rose-50/50 border border-rose-100/80">
-                        <div>
-                            <p class="font-bold text-xs text-slate-800">${item.category}</p>
-                            <p class="text-[10px] text-slate-500">${formatDate(item.date)} • ${item.note || 'Tanpa keterangan'}</p>
-                        </div>
-                        <span class="font-bold text-xs text-rose-600">${formatRp(item.amount)}</span>
-                    </div>
-                `).join('');
-        }
-
-        function renderGallery() {
-            const container = document.getElementById('galleryContainer');
-            container.innerHTML = state.gallery.map(item => `
-                <div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm flex flex-col transition hover:shadow-md">
-                    <div class="w-full bg-slate-900/5 flex items-center justify-center overflow-hidden p-1">
-                        <img src="${item.url}" alt="${item.title}" class="w-full h-auto max-h-[400px] object-contain rounded-xl transition duration-300 group-hover:scale-[1.02]">
-                    </div>
-                    <div class="p-3 bg-white border-t border-slate-100 flex-grow flex items-center justify-between">
-                        <p class="text-xs font-bold text-slate-800 leading-snug">${item.title}</p>
-                    </div>
-                    ${state.accessMode === 'admin' ? `
-                        <button onclick="deleteGalleryItem(${item.id})" class="absolute top-2 right-2 bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow hover:bg-rose-700">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        async function handleAddTransaction(event) {
-            event.preventDefault();
-            const btn = document.getElementById('btnSubmitForm');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-
-            const newTx = {
-                id: Date.now(),
-                group: document.getElementById('inputGroup').value,
-                date: document.getElementById('inputDate').value,
-                type: document.getElementById('inputType').value,
-                category: document.getElementById('inputCategory').value,
-                amount: parseFloat(document.getElementById('inputAmount').value),
-                note: document.getElementById('inputNote').value
-            };
-
-            state.transactions.unshift(newTx);
-            renderData();
-            resetForm();
-
-            if (API_URL && API_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-                try {
-                    await fetch(API_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: 'add', data: newTx })
-                    });
-                } catch (err) {
-                    alert("Gagal menyimpan ke server online. Pastikan koneksi internet HP aktif!");
-                }
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Transaksi';
-        }
-
-        function resetForm() {
-            document.getElementById('transactionForm').reset();
-            document.getElementById('inputDate').valueAsDate = new Date();
-        }
-
-        async function deleteTransaction(id) {
-            if (confirm('Hapus transaksi ini?')) {
-                state.transactions = state.transactions.filter(t => t.id !== id);
-                renderData();
-
-                if (API_URL && API_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-                    await fetch(API_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: 'delete', id: id })
-                    });
-                }
-            }
-        }
-
-        function handleLogoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                compressAndReadImage(file, function(base64) {
-                    document.getElementById('appLogo').src = base64;
-                    document.getElementById('printLogo').src = base64;
-                    localStorage.setItem('mi_saved_logo', base64);
-                });
-            }
-        }
-
-        function handleHeadmasterPhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                compressAndReadImage(file, function(base64) {
-                    document.getElementById('headmasterPhoto').src = base64;
-                    localStorage.setItem('mi_saved_headmaster', base64);
-                });
-            }
-        }
-
-        function handleGalleryUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const title = prompt('Masukkan Judul / Keterangan Foto:', 'Dokumentasi Infaq');
-                if (title) {
-                    compressAndReadImage(file, function(base64) {
-                        state.gallery.push({ id: Date.now(), title: title, url: base64 });
-                        localStorage.setItem('mi_gallery', JSON.stringify(state.gallery));
-                        renderGallery();
-                    });
-                }
-            }
-        }
-
-        function deleteGalleryItem(id) {
-            if (confirm('Hapus foto galeri ini secara permanen?')) {
-                state.gallery = state.gallery.filter(g => g.id !== id);
-                localStorage.setItem('mi_gallery', JSON.stringify(state.gallery));
-                renderGallery();
-            }
-        }
-
-        function exportToCSV() {
-            const filtered = getFilteredTransactions();
-            let csvContent = 'data:text/csv;charset=utf-8,No,Kelompok,Tanggal,Kategori,Keterangan,Jenis,Nominal\n';
-
-            filtered.forEach((tx, idx) => {
-                csvContent += `${idx + 1},${tx.group},${tx.date},"${tx.category}","${tx.note || ''}",${tx.type},${tx.amount}\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `Laporan_Infaq_MI_KWD_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('inputDate').valueAsDate = new Date();
-            document.getElementById('printDate').textContent = new Date().toLocaleDateString('id-ID', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
-
-            const savedLogo = localStorage.getItem('mi_saved_logo');
-            if (savedLogo) {
-                document.getElementById('appLogo').src = savedLogo;
-                document.getElementById('printLogo').src = savedLogo;
-            }
-
-            const savedHeadmaster = localStorage.getItem('mi_saved_headmaster');
-            if (savedHeadmaster) {
-                document.getElementById('headmasterPhoto').src = savedHeadmaster;
-            }
-
-            setAccessMode('public');
-            setTabInfaq('all');
-            fetchTransactionsFromSheet();
-        });
-    </script>
-</body>
-</html>
