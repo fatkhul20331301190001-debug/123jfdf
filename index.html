@@ -383,8 +383,7 @@
 
     <!-- JavaScript Logika Aplikasi Utama -->
     <script>
-        // >>> TEMPAT URL APPS SCRIPT <<<
-        const API_URL = "https://script.google.com/macros/s/AKfycbyy1Q9DzT9vUkm4DDc_BzbWulJQtJ28r-eoHT_I0FbvTt9wFxGDlDpTG2g_UM0d5knv/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycby3LGr4MydaBRXWtipsp6RY_P0KV4v6WIY7qpMQVywHMnOzRFCJ-NY6k6Sk7ekXuaCx/exec";
 
         const initialGallery = [
             { id: 1, title: 'Kegiatan Perbaikan Kelas', url: 'https://placehold.co/400x300/166534/ffffff?text=Perbaikan+Kelas' },
@@ -398,22 +397,29 @@
             gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery
         };
 
-        // Ambil Data dari Google Sheets
+        // Ambil Data dari Google Sheets dengan Pemetaan Properti Akurat
         async function fetchTransactionsFromSheet() {
             if (!API_URL) return;
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                if (Array.isArray(data) && data.length > 0) {
+                
+                if (Array.isArray(data)) {
                     state.transactions = data.map(t => ({
-                        ...t,
-                        amount: Number(t.amount) || 0
+                        id: Number(t.id) || Date.now(),
+                        group: String(t.group || 'mingguan').toLowerCase(),
+                        date: String(t.date || ''),
+                        type: String(t.type || 'masuk').toLowerCase(),
+                        category: String(t.category || ''),
+                        amount: Number(t.amount) || 0,
+                        note: String(t.note || '')
                     }));
                     saveLocalTransactions();
                     renderData();
                 }
             } catch (err) {
-                console.warn("Membaca dari cadangan lokal karena koneksi server lambat.");
+                console.warn("Koneksi server lambat. Memuat dari memori lokal.", err);
+                renderData();
             }
         }
 
@@ -463,7 +469,6 @@
             localStorage.setItem('mi_transactions', JSON.stringify(state.transactions));
         }
 
-        // Sakelar Mode Publik vs Mode Pengurus
         function setAccessMode(mode) {
             state.accessMode = mode;
             const btnPublic = document.getElementById('btnModePublic');
@@ -656,6 +661,7 @@
             }
         }
 
+        // Fungsi Simpan Transaksi dengan Urutan Kolom Terkalibrasi
         async function handleAddTransaction(event) {
             event.preventDefault();
             const btn = document.getElementById('btnSubmitForm');
@@ -788,7 +794,6 @@
             document.body.removeChild(link);
         }
 
-        // Inisialisasi Otomatis saat Halaman Selesai Dimuat
         document.addEventListener('DOMContentLoaded', () => {
             const dateInput = document.getElementById('inputDate');
             if (dateInput) dateInput.valueAsDate = new Date();
