@@ -1,76 +1,126 @@
-// 1. Membaca data dari Google Sheets dan memastikan nominal dibaca sebagai angka
-async function fetchTransactionsFromSheet() {
-    if (!API_URL) return;
-    try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        
-        if (Array.isArray(data)) {
-            state.transactions = data.map(t => ({
-                id: Number(t.id) || Date.now(),
-                group: String(t.group || 'mingguan').toLowerCase(),
-                date: String(t.date || ''),
-                type: String(t.type || 'masuk').toLowerCase(),
-                category: String(t.category || ''),
-                // Mengonversi string/undefined menjadi angka murni
-                amount: Number(t.amount) || 0,
-                note: String(t.note || '')
-            }));
-            saveLocalTransactions();
-            renderData();
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Meta Tag Mencegah Cache Browser -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Sistem Informasi Infaq & Sedekah - MI Ma'arif Kuwaderan</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nuGreen: {
+                            50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0',
+                            600: '#16a34a', 700: '#15803d', 800: '#166534',
+                            900: '#0d4e28', 950: '#052e16',
+                        },
+                        nuGold: {
+                            300: '#fde047', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706',
+                        }
+                    }
+                }
+            }
         }
-    } catch (err) {
-        console.warn("Gagal memuat dari Google Sheets, menggunakan data lokal:", err);
-        renderData();
-    }
-}
-
-// 2. Menyimpan transaksi baru dari form input nominal
-async function handleAddTransaction(event) {
-    event.preventDefault();
-    const btn = document.getElementById('btnSubmitForm');
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-    }
-
-    // Mengambil nilai input dan mengonversi nominal ke Number
-    const rawAmount = document.getElementById('inputAmount').value;
-    const numericAmount = Number(rawAmount) || 0;
-
-    const newTx = {
-        id: Date.now(),
-        group: document.getElementById('inputGroup').value,
-        date: document.getElementById('inputDate').value,
-        type: document.getElementById('inputType').value,
-        category: document.getElementById('inputCategory').value,
-        amount: numericAmount, // Nominal tersimpan sebagai angka
-        note: document.getElementById('inputNote').value
-    };
-
-    // Tambahkan ke state lokal dan render UI
-    state.transactions.unshift(newTx);
-    saveLocalTransactions();
-    renderData();
-    resetForm();
-
-    // Kirim data ke Google Sheets melalui API
-    if (API_URL) {
-        try {
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
-                body: JSON.stringify({ action: 'add', data: newTx })
-            });
-        } catch (err) {
-            console.error("Gagal sinkronisasi online ke Google Sheets:", err);
+    </script>
+    
+    <!-- FontAwesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background-color: white !important; color: black !important; font-size: 11pt; }
+            .card-box { border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+            table { width: 100% !important; border-collapse: collapse !important; }
+            th, td { border: 1px solid #94a3b8 !important; padding: 6px 8px !important; }
         }
-    }
+        .print-only { display: none; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Transaksi';
-    }
-}
+    <!-- Header Kop Surat Cetak -->
+    <div class="print-only p-4 mb-4 border-b-2 border-slate-800">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img id="printLogo" src="https://placehold.co/100x100/166534/ffffff?text=MI+KWD" alt="Logo" class="h-20 w-20 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold uppercase tracking-wide text-slate-900">LEMBAGA MA'ARIF NU</h1>
+                    <h2 class="text-2xl font-extrabold uppercase tracking-wide text-emerald-900">MI MA'ARIF KUWADERAN</h2>
+                    <p class="text-xs text-slate-600 mt-0.5">Alamat: Kuwaderan, Kec. Kajoran, Kab. Magelang, Jawa Tengah</p>
+                    <p class="text-xs font-semibold text-emerald-800">Laporan Transparansi Kas Real-Time</p>
+                </div>
+            </div>
+            <div class="text-right text-xs text-slate-500">
+                <p>Dicetak Pada:</p>
+                <p id="printDate" class="font-semibold text-slate-800">-</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigasi Utama -->
+    <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl no-print sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="relative group">
+                        <div class="w-14 h-14 rounded-xl bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border-2 border-nuGold-400">
+                            <img id="appLogo" src="https://placehold.co/100x100/166534/ffffff?text=MI+KWD" alt="Logo MI Ma'arif Kuwaderan" class="w-full h-full object-contain">
+                        </div>
+                        <label for="logoUpload" class="admin-only-btn absolute inset-0 bg-black/70 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-[10px] text-white text-center font-semibold p-1">
+                            <i class="fa-solid fa-camera mr-1"></i> Ubah Logo
+                        </label>
+                        <input type="file" id="logoUpload" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                    </div>
+                    
+                    <div class="text-center md:text-left">
+                        <div class="inline-flex items-center gap-1.5 bg-nuGreen-800/80 px-2.5 py-0.5 rounded-full text-[11px] text-nuGold-400 border border-nuGold-500/30 font-medium mb-1">
+                            <i class="fa-solid fa-mosque"></i> Portal Transparansi Publik
+                        </div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white uppercase leading-tight">INFAQ MI MA'ARIF KUWADERAN</h1>
+                        <p class="text-xs text-emerald-200/90 font-light">Sistem Pengelolaan Pemasukan & Pengeluaran Kas Madrasah</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 bg-nuGreen-900/80 p-1.5 rounded-xl border border-emerald-700/50 shadow-inner">
+                    <button type="button" onclick="setAccessMode('public')" id="btnModePublic" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200">
+                        <i class="fa-solid fa-eye"></i> Mode Publik / Wali Murid
+                    </button>
+                    <button type="button" onclick="setAccessMode('admin')" id="btnModeAdmin" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200">
+                        <i class="fa-solid fa-user-shield"></i> Mode Pengurus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Banner Mode & Aksi -->
+        <div id="modeIndicator" class="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <span id="modeBadge" class="px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5"></span>
+                <span id="modeDescription" class="text-xs text-slate-600 font-medium"></span>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button type="button" onclick="exportToCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-3.5 py-1.5 rounded-xl border border-emerald-200 text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-emerald-600"></i> Export CSV
+                </button>
+                <button type="button" onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-sm flex items-
