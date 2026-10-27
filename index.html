@@ -381,7 +381,7 @@
 
     </main>
 
-    <!-- JavaScript Logika Aplikasi Utama -->
+    <!-- JavaScript Logika Utama -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycby3LGr4MydaBRXWtipsp6RY_P0KV4v6WIY7qpMQVywHMnOzRFCJ-NY6k6Sk7ekXuaCx/exec";
 
@@ -397,7 +397,6 @@
             gallery: JSON.parse(localStorage.getItem('mi_gallery')) || initialGallery
         };
 
-        // Membaca Data dari Google Sheets dan Memastikan Nominal Selalu Berupa Angka
         async function fetchTransactionsFromSheet() {
             if (!API_URL) return;
             try {
@@ -411,14 +410,14 @@
                         date: String(t.date || ''),
                         type: String(t.type || 'masuk').toLowerCase(),
                         category: String(t.category || ''),
-                        amount: Number(t.amount) || 0, // Mengonversi ke Number murni
+                        amount: Number(t.amount) || 0,
                         note: String(t.note || '')
                     }));
                     saveLocalTransactions();
                     renderData();
                 }
             } catch (err) {
-                console.warn("Koneksi server lambat. Memuat dari data lokal.", err);
+                console.warn("Memuat dari memori lokal karena koneksi server:", err);
                 renderData();
             }
         }
@@ -661,7 +660,6 @@
             }
         }
 
-        // Menyimpan Transaksi dan Mengonversi Input Nominal ke Tipe Angka Murni
         async function handleAddTransaction(event) {
             event.preventDefault();
             const btn = document.getElementById('btnSubmitForm');
@@ -670,7 +668,6 @@
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
             }
 
-            // Memastikan nominal dikonversi menjadi Number
             const rawAmount = document.getElementById('inputAmount').value;
             const numericAmount = Number(rawAmount) || 0;
 
@@ -680,7 +677,7 @@
                 date: document.getElementById('inputDate').value,
                 type: document.getElementById('inputType').value,
                 category: document.getElementById('inputCategory').value,
-                amount: numericAmount, // Nominal tersimpan presisi
+                amount: numericAmount,
                 note: document.getElementById('inputNote').value
             };
 
