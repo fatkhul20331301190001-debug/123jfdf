@@ -55,7 +55,6 @@
                     </div>
                 </div>
 
-                <!-- TOMBOL SAKLAR MODE AKSES -->
                 <div class="flex items-center gap-2 bg-nuGreen-900/80 p-1.5 rounded-xl border border-emerald-700/50 shadow-inner">
                     <button type="button" onclick="setAccessMode('public')" id="btnModePublic" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow transition">
                         <i class="fa-solid fa-eye"></i> Mode Publik
@@ -70,7 +69,6 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- TOMBOL FILTER TAB KATEGORI INFAQ -->
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
             <div class="flex flex-wrap gap-2">
                 <button type="button" onclick="setTabInfaq('all')" id="tabInfaqAll" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-nuGreen-800 text-white shadow-md">
@@ -88,7 +86,6 @@
             </div>
         </div>
 
-        <!-- KARTU RINGKASAN SALDO -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
                 <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Total Pemasukan</p>
@@ -106,7 +103,7 @@
             </div>
         </div>
 
-        <!-- FORMULIR INPUT KHUSUS PENGURUS -->
+        <!-- AREA INPUT TRANSAKSI -->
         <div id="adminFormSection" class="hidden bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5">
             <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-plus text-emerald-600"></i> Input Transaksi Kas Infaq Baru
@@ -148,15 +145,13 @@
                     <button type="button" onclick="resetFormFields()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
                         Reset
                     </button>
-                    <!-- TOMBOL SIMPAN UTAMA -->
-                    <button type="button" id="btnSubmitForm" onclick="saveTransactionDirectly()" class="bg-nuGreen-800 hover:bg-nuGreen-900 text-white font-bold px-6 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-md">
+                    <button type="button" id="btnSubmitForm" class="bg-nuGreen-800 hover:bg-nuGreen-900 text-white font-bold px-6 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-md cursor-pointer">
                         <i class="fa-solid fa-floppy-disk"></i> Simpan Transaksi
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- TABEL DATA TRANSAKSI -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs sm:text-sm">
@@ -179,7 +174,6 @@
 
     </main>
 
-    <!-- LOGIKA JAVASCRIPT LENGKAP -->
     <script>
         const STORAGE_KEY = 'infaq_kas_data';
 
@@ -189,7 +183,6 @@
             transactions: []
         };
 
-        // Memuat data dari memori browser
         function loadStoredData() {
             try {
                 const savedTx = localStorage.getItem(STORAGE_KEY);
@@ -197,20 +190,18 @@
                     state.transactions = JSON.parse(savedTx);
                 }
             } catch (e) {
-                console.warn("Gagal membaca memori lokal:", e);
+                console.warn("Gagal membaca data dari memori browser:", e);
             }
         }
 
-        // Menyimpan data ke memori browser
         function saveToLocalStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transactions));
             } catch (e) {
-                alert("Gagal menyimpan data ke browser.");
+                alert("Penyimpanan browser penuh.");
             }
         }
 
-        // Eksekusi Tombol Simpan Transaksi
         function saveTransactionDirectly() {
             const categoryInput = document.getElementById('inputCategory');
             const amountInput = document.getElementById('inputAmount');
@@ -218,6 +209,11 @@
             const dateInput = document.getElementById('inputDate');
             const typeInput = document.getElementById('inputType');
             const noteInput = document.getElementById('inputNote');
+
+            if (!categoryInput || !amountInput) {
+                alert('Elemen form tidak ditemukan.');
+                return;
+            }
 
             if (!categoryInput.value.trim() || !amountInput.value) {
                 alert('Mohon isi Kategori dan Nominal Transaksi dengan benar.');
@@ -228,12 +224,12 @@
 
             const newTx = {
                 id: Date.now(),
-                group: groupInput.value,
-                date: dateInput.value,
-                type: typeInput.value,
+                group: groupInput ? groupInput.value : 'mingguan',
+                date: dateInput ? dateInput.value : new Date().toISOString().slice(0, 10),
+                type: typeInput ? typeInput.value : 'masuk',
                 category: categoryInput.value.trim(),
                 amount: numericAmount,
-                note: noteInput.value.trim()
+                note: noteInput ? noteInput.value.trim() : ''
             };
 
             state.transactions.unshift(newTx);
@@ -244,16 +240,18 @@
             alert('Transaksi berhasil disimpan!');
         }
 
-        // Reset Isian Form Input
         function resetFormFields() {
-            document.getElementById('inputCategory').value = '';
-            document.getElementById('inputAmount').value = '';
-            document.getElementById('inputNote').value = '';
+            const cat = document.getElementById('inputCategory');
+            const amt = document.getElementById('inputAmount');
+            const note = document.getElementById('inputNote');
             const dateInput = document.getElementById('inputDate');
+
+            if (cat) cat.value = '';
+            if (amt) amt.value = '';
+            if (note) note.value = '';
             if (dateInput) dateInput.valueAsDate = new Date();
         }
 
-        // Eksekusi Tombol Hapus
         function deleteTransaction(id) {
             if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
                 state.transactions = state.transactions.filter(t => t.id !== id);
@@ -262,12 +260,10 @@
             }
         }
 
-        // Format Angka ke Rupiah
         function formatRp(num) {
             return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
         }
 
-        // Format Tanggal
         function formatDate(dateStr) {
             if (!dateStr) return '-';
             const parts = String(dateStr).slice(0, 10).split('-');
@@ -275,14 +271,12 @@
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
-        // Filter Data Transaksi Sesuai Tab Aktif
         function getFilteredTransactions() {
             return state.transactions.filter(item => {
                 return state.activeTab === 'all' || item.group === state.activeTab;
             });
         }
 
-        // Merender Tampilan Data Ke Layar
         function renderData() {
             const tableBody = document.getElementById('transactionTableBody');
             const filtered = getFilteredTransactions();
@@ -316,7 +310,6 @@
                 }
             }
 
-            // Menghitung Saldo
             const activeSet = getFilteredTransactions();
             const totalMasuk = activeSet.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
             const totalKeluar = activeSet.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
@@ -327,7 +320,6 @@
             if (document.getElementById('cardSisaSaldo')) document.getElementById('cardSisaSaldo').textContent = formatRp(sisaSaldo);
         }
 
-        // Eksekusi Tombol Ganti Mode Publik / Pengurus
         function setAccessMode(mode) {
             state.accessMode = mode;
             const adminForm = document.getElementById('adminFormSection');
@@ -336,4 +328,51 @@
 
             if (mode === 'admin') {
                 if (adminForm) adminForm.classList.remove('hidden');
-                if (btnAdmin)
+                if (btnAdmin) btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-nuGold-400 text-slate-900 shadow transition';
+                if (btnPublic) btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white transition';
+            } else {
+                if (adminForm) adminForm.classList.add('hidden');
+                if (btnPublic) btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow transition';
+                if (btnAdmin) btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white transition';
+            }
+
+            renderData();
+        }
+
+        function setTabInfaq(tab) {
+            state.activeTab = tab;
+            const tabs = ['all', 'mingguan', 'bulanan', 'lainnya'];
+            
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tabInfaq${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (btn) {
+                    if (t === tab) {
+                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-nuGreen-800 text-white shadow-md';
+                    } else {
+                        btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
+                    }
+                }
+            });
+
+            renderData();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStoredData();
+            
+            const dateInput = document.getElementById('inputDate');
+            if (dateInput) dateInput.valueAsDate = new Date();
+            
+            // Pendaftaran Event Listener Tombol Simpan
+            const btnSubmit = document.getElementById('btnSubmitForm');
+            if (btnSubmit) {
+                btnSubmit.addEventListener('click', saveTransactionDirectly);
+            }
+
+            setAccessMode('public');
+            setTabInfaq('all');
+            renderData();
+        });
+    </script>
+</body>
+</html>
