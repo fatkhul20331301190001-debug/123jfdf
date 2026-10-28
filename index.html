@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Meta Tag Mencegah Cache Browser -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
     <title>Sistem Informasi Infaq & Sedekah - MI Ma'arif Kuwaderan</title>
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,7 +30,6 @@
         }
     </script>
     
-    <!-- FontAwesome Icons & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +53,6 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- Header Kop Surat Cetak -->
     <div class="print-only p-4 mb-4 border-b-2 border-slate-800">
         <div class="flex items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -75,7 +71,6 @@
         </div>
     </div>
 
-    <!-- Navigasi Utama -->
     <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl no-print sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -113,7 +108,6 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- Banner Mode & Aksi -->
         <div id="modeIndicator" class="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <span id="modeBadge" class="px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5"></span>
@@ -129,7 +123,6 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="no-print flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
             <div class="flex flex-wrap gap-2">
                 <button type="button" onclick="setTabInfaq('all')" id="tabInfaqAll" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
@@ -151,7 +144,6 @@
             </div>
         </div>
 
-        <!-- Metric Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden">
                 <div class="flex items-center justify-between mb-2">
@@ -187,7 +179,6 @@
             </div>
         </div>
 
-        <!-- Detail Rincian -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-4">
                 <div class="flex items-center justify-between border-b border-emerald-100 pb-3 mb-3">
@@ -216,7 +207,6 @@
             </div>
         </div>
 
-        <!-- Form Input Transaksi -->
         <div id="adminFormSection" class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5 no-print transition-all">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -273,7 +263,6 @@
             </form>
         </div>
 
-        <!-- Tabel Riwayat Kas -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-center no-print">
                 <div class="flex items-center gap-2 w-full md:w-auto">
@@ -317,7 +306,6 @@
             </div>
         </div>
 
-        <!-- Sambutan Kepala Sekolah -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
             <div class="text-center mb-6">
                 <span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
@@ -357,7 +345,6 @@
             </div>
         </section>
 
-        <!-- Galeri Foto Kegiatan -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 my-6 no-print">
             <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-3">
                 <div>
@@ -381,7 +368,6 @@
 
     </main>
 
-    <!-- JavaScript Logika Utama -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycby3LGr4MydaBRXWtipsp6RY_P0KV4v6WIY7qpMQVywHMnOzRFCJ-NY6k6Sk7ekXuaCx/exec";
 
@@ -417,7 +403,7 @@
                     renderData();
                 }
             } catch (err) {
-                console.warn("Memuat dari memori lokal karena koneksi server:", err);
+                console.warn("Memuat data dari memori lokal:", err);
                 renderData();
             }
         }
@@ -669,7 +655,7 @@
             }
 
             const rawAmount = document.getElementById('inputAmount').value;
-            const numericAmount = Number(rawAmount) || 0;
+            const numericAmount = Number(rawAmount) || 0; // Mengonversi tegas ke Number
 
             const newTx = {
                 id: Date.now(),
