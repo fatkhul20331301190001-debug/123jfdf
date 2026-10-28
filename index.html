@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>Sistem Informasi Infaq & Sedekah - MI Ma'arif Kuwaderan</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,6 +37,15 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background-color: white !important; color: black !important; font-size: 11pt; }
+            .card-box { border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+            table { width: 100% !important; border-collapse: collapse !important; }
+            th, td { border: 1px solid #94a3b8 !important; padding: 6px 8px !important; }
+        }
+        .print-only { display: none; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -39,13 +53,38 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl sticky top-0 z-50">
+    <div class="print-only p-4 mb-4 border-b-2 border-slate-800">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img id="printLogo" src="https://placehold.co/100x100/166534/ffffff?text=MI+KWD" alt="Logo" class="h-20 w-20 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold uppercase tracking-wide text-slate-900">LEMBAGA MA'ARIF NU</h1>
+                    <h2 class="text-2xl font-extrabold uppercase tracking-wide text-emerald-900">MI MA'ARIF KUWADERAN</h2>
+                    <p class="text-xs text-slate-600 mt-0.5">Alamat: Kuwaderan, Kec. Kajoran, Kab. Magelang, Jawa Tengah</p>
+                    <p class="text-xs font-semibold text-emerald-800">Laporan Transparansi Kas Real-Time</p>
+                </div>
+            </div>
+            <div class="text-right text-xs text-slate-500">
+                <p>Dicetak Pada:</p>
+                <p id="printDate" class="font-semibold text-slate-800">-</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-gradient-to-r from-nuGreen-950 via-nuGreen-900 to-nuGreen-950 text-white shadow-xl no-print sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-14 h-14 rounded-xl bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border-2 border-nuGold-400">
-                        <img id="appLogo" src="https://placehold.co/100x100/166534/ffffff?text=MI+KWD" alt="Logo" class="w-full h-full object-contain">
+                    <div class="relative group">
+                        <div class="w-14 h-14 rounded-xl bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border-2 border-nuGold-400">
+                            <img id="appLogo" src="https://placehold.co/100x100/166534/ffffff?text=MI+KWD" alt="Logo MI Ma'arif Kuwaderan" class="w-full h-full object-contain">
+                        </div>
+                        <label for="logoUpload" class="admin-only-btn absolute inset-0 bg-black/70 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-[10px] text-white text-center font-semibold p-1">
+                            <i class="fa-solid fa-camera mr-1"></i> Ubah Logo
+                        </label>
+                        <input type="file" id="logoUpload" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
                     </div>
+                    
                     <div class="text-center md:text-left">
                         <div class="inline-flex items-center gap-1.5 bg-nuGreen-800/80 px-2.5 py-0.5 rounded-full text-[11px] text-nuGold-400 border border-nuGold-500/30 font-medium mb-1">
                             <i class="fa-solid fa-mosque"></i> Portal Transparansi Publik
@@ -56,10 +95,10 @@
                 </div>
 
                 <div class="flex items-center gap-2 bg-nuGreen-900/80 p-1.5 rounded-xl border border-emerald-700/50 shadow-inner">
-                    <button type="button" onclick="setAccessMode('public')" id="btnModePublic" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow">
-                        <i class="fa-solid fa-eye"></i> Mode Publik
+                    <button type="button" onclick="setAccessMode('public')" id="btnModePublic" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200">
+                        <i class="fa-solid fa-eye"></i> Mode Publik / Wali Murid
                     </button>
-                    <button type="button" onclick="setAccessMode('admin')" id="btnModeAdmin" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white">
+                    <button type="button" onclick="setAccessMode('admin')" id="btnModeAdmin" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200">
                         <i class="fa-solid fa-user-shield"></i> Mode Pengurus
                     </button>
                 </div>
@@ -69,246 +108,156 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Total Pemasukan</p>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-700" id="cardTotalMasuk">Rp 0</h3>
+        <div id="modeIndicator" class="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <span id="modeBadge" class="px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5"></span>
+                <span id="modeDescription" class="text-xs text-slate-600 font-medium"></span>
             </div>
-
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Total Pengeluaran</p>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-rose-600" id="cardTotalKeluar">Rp 0</h3>
-            </div>
-
-            <div class="bg-gradient-to-br from-nuGreen-800 via-nuGreen-900 to-nuGreen-950 rounded-2xl p-5 shadow-md text-white">
-                <p class="text-xs font-bold uppercase tracking-wider text-nuGold-400 mb-2">Sisa Saldo Kas</p>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white" id="cardSisaSaldo">Rp 0</h3>
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button type="button" onclick="exportToCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-3.5 py-1.5 rounded-xl border border-emerald-200 text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-emerald-600"></i> Export CSV
+                </button>
+                <button type="button" onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak Laporan
+                </button>
             </div>
         </div>
 
-        <div id="adminFormSection" class="hidden bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5">
-            <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-plus text-emerald-600"></i> Input Transaksi Kas Infaq
-            </h2>
+        <div class="no-print flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+            <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="setTabInfaq('all')" id="tabInfaqAll" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group"></i> Semua Infaq (Gabungan)
+                </button>
+                <button type="button" onclick="setTabInfaq('mingguan')" id="tabInfaqMingguan" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-hand-holding-dollar"></i> Amal Mingguan
+                </button>
+                <button type="button" onclick="setTabInfaq('bulanan')" id="tabInfaqBulanan" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-check"></i> Infaq Bulanan
+                </button>
+                <button type="button" onclick="setTabInfaq('lainnya')" id="tabInfaqLainnya" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-wallet"></i> Pendapatan Lainnya
+                </button>
+            </div>
+
+            <div class="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-900 rounded-lg border border-emerald-300/80" id="currentTabLabel">
+                <i class="fa-solid fa-filter mr-1 text-emerald-700"></i> Kategori: Semua Infaq (Gabungan)
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pemasukan</p>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-down-left"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight" id="cardTotalMasuk">Rp 0</h3>
+                <p class="text-[11px] text-slate-400 mt-1 font-medium">Pemasukan terakumulasi</p>
+            </div>
+
+            <div class="card-box bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pengeluaran</p>
+                    <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-up-right"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-rose-600 tracking-tight" id="cardTotalKeluar">Rp 0</h3>
+                <p class="text-[11px] text-slate-400 mt-1 font-medium">Pengeluaran dana</p>
+            </div>
+
+            <div class="card-box bg-gradient-to-br from-nuGreen-800 via-nuGreen-900 to-nuGreen-950 rounded-2xl p-5 shadow-md border border-nuGreen-700 text-white relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-bold uppercase tracking-wider text-nuGold-400">Sisa Saldo Kas Infaq</p>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-800/60 text-nuGold-400 flex items-center justify-center border border-nuGold-500/20">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" id="cardSisaSaldo">Rp 0</h3>
+                <p class="text-[11px] text-emerald-200/80 mt-1 font-medium">Saldo bersih saat ini</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-4">
+                <div class="flex items-center justify-between border-b border-emerald-100 pb-3 mb-3">
+                    <h3 class="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-circle-arrow-down"></i>
+                        </span>
+                        Rincian Uang Masuk (<span id="inflowCategoryTitle">Semua Infaq</span>)
+                    </h3>
+                    <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200" id="inflowCount">0 Transaksi</span>
+                </div>
+                <div class="max-h-60 overflow-y-auto pr-1 space-y-2" id="inflowDetailList"></div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-rose-200/80 p-4">
+                <div class="flex items-center justify-between border-b border-rose-100 pb-3 mb-3">
+                    <h3 class="text-xs font-extrabold text-rose-900 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-circle-arrow-up"></i>
+                        </span>
+                        Rincian Uang Keluar (<span id="outflowCategoryTitle">Semua Infaq</span>)
+                    </h3>
+                    <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200" id="outflowCount">0 Transaksi</span>
+                </div>
+                <div class="max-h-60 overflow-y-auto pr-1 space-y-2" id="outflowDetailList"></div>
+            </div>
+        </div>
+
+        <div id="adminFormSection" class="bg-white rounded-2xl shadow-sm border border-emerald-200/80 p-5 no-print transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                    Input Transaksi Kas Infaq Baru
+                </h2>
+                <span class="text-[11px] bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full font-semibold">
+                    <i class="fa-solid fa-lock mr-1"></i> Khusus Pengurus
+                </span>
+            </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
+            <form id="transactionForm" onsubmit="handleAddTransaction(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Kelompok Kas</label>
-                    <select id="inputGroup" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <select id="inputGroup" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-emerald-50/50 font-semibold text-emerald-900">
                         <option value="mingguan">Amal Mingguan</option>
                         <option value="bulanan">Infaq Bulanan</option>
                         <option value="lainnya">Pendapatan Lainnya</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                    <input type="date" id="inputDate" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Transaksi</label>
+                    <input type="date" id="inputDate" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Jenis Transaksi</label>
-                    <select id="inputType" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
-                        <option value="masuk">Pemasukan</option>
-                        <option value="keluar">Pengeluaran</option>
+                    <select id="inputType" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
+                        <option value="masuk">Pemasukan (Uang Masuk)</option>
+                        <option value="keluar">Pengeluaran (Penggunaan Dana)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
-                    <input type="text" id="inputCategory" placeholder="Cth: Amal Jumat" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <input type="text" id="inputCategory" placeholder="Cth: Amal Jumat / SPP" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nominal (Rp)</label>
-                    <input type="number" id="inputAmount" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <input type="number" id="inputAmount" placeholder="0" min="1" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan</label>
-                    <input type="text" id="inputNote" placeholder="Uraian..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan / Uraian</label>
+                    <input type="text" id="inputNote" placeholder="Cth: Pembayaran Bulan Oktober" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none text-slate-700">
                 </div>
-                <div class="sm:col-span-2 lg:col-span-6 flex justify-end gap-2 mt-2">
-                    <button type="button" onclick="saveTransactionDirectly()" class="bg-nuGreen-800 hover:bg-nuGreen-900 text-white font-bold px-6 py-2 rounded-xl text-xs">
-                        Simpan Transaksi
+                <div class="sm:col-span-2 lg:col-span-6 flex justify-end gap-2 mt-2 pt-2 border-t border-slate-100">
+                    <button type="button" onclick="resetForm()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
+                        Reset Form
+                    </button>
+                    <button type="submit" id="btnSubmitForm" class="bg-nuGreen-800 hover:bg-nuGreen-900 text-white font-bold px-6 py-2 rounded-xl text-xs transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Transaksi
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                    <thead>
-                        <tr class="bg-nuGreen-950 text-white font-semibold">
-                            <th class="p-3.5 text-center w-12">No</th>
-                            <th class="p-3.5">Kelompok</th>
-                            <th class="p-3.5">Tanggal</th>
-                            <th class="p-3.5">Kategori</th>
-                            <th class="p-3.5">Keterangan</th>
-                            <th class="p-3.5 text-right">Pemasukan (Rp)</th>
-                            <th class="p-3.5 text-right">Pengeluaran (Rp)</th>
-                            <th class="p-3.5 text-center w-16">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- KODE JAVASCRIPT DIBUNGKUS DENGAN LENGKAP DI SINI -->
-    <script>
-        const STORAGE_KEY = 'infaq_kas_data';
-
-        let state = {
-            accessMode: 'public',
-            activeTab: 'all',
-            transactions: []
-        };
-
-        function loadStoredData() {
-            try {
-                const savedTx = localStorage.getItem(STORAGE_KEY);
-                if (savedTx) {
-                    state.transactions = JSON.parse(savedTx);
-                }
-            } catch (e) {
-                console.warn("Gagal membaca memori lokal:", e);
-            }
-        }
-
-        function saveToLocalStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transactions));
-            } catch (e) {
-                alert("Gagal menyimpan data ke browser.");
-            }
-        }
-
-        function saveTransactionDirectly() {
-            const categoryInput = document.getElementById('inputCategory');
-            const amountInput = document.getElementById('inputAmount');
-            const groupInput = document.getElementById('inputGroup');
-            const dateInput = document.getElementById('inputDate');
-            const typeInput = document.getElementById('inputType');
-            const noteInput = document.getElementById('inputNote');
-
-            if (!categoryInput.value.trim() || !amountInput.value) {
-                alert('Mohon isi Kategori dan Nominal Transaksi dengan benar.');
-                return;
-            }
-
-            const numericAmount = Number(amountInput.value) || 0;
-
-            const newTx = {
-                id: Date.now(),
-                group: groupInput.value,
-                date: dateInput.value,
-                type: typeInput.value,
-                category: categoryInput.value.trim(),
-                amount: numericAmount,
-                note: noteInput.value.trim()
-            };
-
-            state.transactions.unshift(newTx);
-            saveToLocalStorage();
-            renderData();
-            resetFormFields();
-
-            alert('Transaksi berhasil disimpan di browser!');
-        }
-
-        function resetFormFields() {
-            document.getElementById('inputCategory').value = '';
-            document.getElementById('inputAmount').value = '';
-            document.getElementById('inputNote').value = '';
-            const dateInput = document.getElementById('inputDate');
-            if (dateInput) dateInput.valueAsDate = new Date();
-        }
-
-        function deleteTransaction(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
-                state.transactions = state.transactions.filter(t => t.id !== id);
-                saveToLocalStorage();
-                renderData();
-            }
-        }
-
-        function formatRp(num) {
-            return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return '-';
-            const parts = String(dateStr).slice(0, 10).split('-');
-            if (parts.length !== 3) return dateStr;
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-
-        function renderData() {
-            const tableBody = document.getElementById('transactionTableBody');
-            
-            if (tableBody) {
-                tableBody.innerHTML = '';
-                if (state.transactions.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400 italic">Belum ada data transaksi tersimpan.</td></tr>`;
-                } else {
-                    state.transactions.forEach((tx, idx) => {
-                        const row = document.createElement('tr');
-                        row.className = 'hover:bg-slate-50/80 transition';
-                        row.innerHTML = `
-                            <td class="p-3.5 text-center font-medium text-slate-500">${idx + 1}</td>
-                            <td class="p-3.5 font-bold uppercase text-[11px] text-emerald-800">${tx.group}</td>
-                            <td class="p-3.5 whitespace-nowrap">${formatDate(tx.date)}</td>
-                            <td class="p-3.5 font-semibold text-slate-800">${tx.category}</td>
-                            <td class="p-3.5 text-slate-600">${tx.note || '-'}</td>
-                            <td class="p-3.5 text-right font-bold text-emerald-600">${tx.type === 'masuk' ? formatRp(tx.amount) : '-'}</td>
-                            <td class="p-3.5 text-right font-bold text-rose-600">${tx.type === 'keluar' ? formatRp(tx.amount) : '-'}</td>
-                            <td class="p-3.5 text-center">
-                                ${state.accessMode === 'admin' ? `
-                                    <button onclick="deleteTransaction(${tx.id})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                ` : '-'}
-                            </td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
-                }
-            }
-
-            const totalMasuk = state.transactions.filter(t => t.type === 'masuk').reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
-            const totalKeluar = state.transactions.filter(t => t.type === 'keluar').reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
-            const sisaSaldo = totalMasuk - totalKeluar;
-
-            if (document.getElementById('cardTotalMasuk')) document.getElementById('cardTotalMasuk').textContent = formatRp(totalMasuk);
-            if (document.getElementById('cardTotalKeluar')) document.getElementById('cardTotalKeluar').textContent = formatRp(totalKeluar);
-            if (document.getElementById('cardSisaSaldo')) document.getElementById('cardSisaSaldo').textContent = formatRp(sisaSaldo);
-        }
-
-        function setAccessMode(mode) {
-            state.accessMode = mode;
-            const adminForm = document.getElementById('adminFormSection');
-            const btnPublic = document.getElementById('btnModePublic');
-            const btnAdmin = document.getElementById('btnModeAdmin');
-
-            if (mode === 'admin') {
-                if (adminForm) adminForm.classList.remove('hidden');
-                if (btnAdmin) btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-nuGold-400 text-slate-900 shadow';
-                if (btnPublic) btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white';
-            } else {
-                if (adminForm) adminForm.classList.add('hidden');
-                if (btnPublic) btnPublic.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-emerald-950 shadow';
-                if (btnAdmin) btnAdmin.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-200 hover:text-white';
-            }
-
-            renderData();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadStoredData();
-            const dateInput = document.getElementById('inputDate');
-            if (dateInput) dateInput.valueAsDate = new Date();
-            setAccessMode('public');
-            renderData();
-        });
-    </script>
-</body>
-</html>
+            </form>
